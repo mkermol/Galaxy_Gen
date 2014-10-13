@@ -10,7 +10,7 @@ public class SateliteBehaviour : MonoBehaviour {
 
 	const double G = 6.672* 0.000001 ;//* 0.00000000001;
 	Vector3 refVector,n,position;
-
+	private float rx,ry;
 
 
 
@@ -33,8 +33,10 @@ public class SateliteBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		V = (G * M*m) / (R*R); // calculate mean veolicyt magnitude at epoch
+
+		V = (G * M*m) / (R*R); // calculate mean velocity magnitude at epoch
 		meanA = SignedAngleBetween (transform.position,refVector, n);//calculate mean anomally at epoch
+
 
 		//calculate and correct position to stable orbit
 		position.x =(float)( R * Math.Cos (Mathf.Deg2Rad * meanA));
@@ -42,8 +44,8 @@ public class SateliteBehaviour : MonoBehaviour {
 		transform.position = position;
 
 		//calculate mean velocity vectors
-		movement.x = (float)(V * -Math.Sin (Mathf.Deg2Rad*meanA)*Time.deltaTime);
-		movement.z = (float)(V * Math.Cos (Mathf.Deg2Rad*meanA)*Time.deltaTime);
+		movement.x = (float)(V * -Math.Sin (Mathf.Deg2Rad*meanA)*Time.deltaTime*GlobalTimer.timeScale);
+		movement.z = (float)(V * Math.Cos (Mathf.Deg2Rad*meanA)*Time.deltaTime*GlobalTimer.timeScale);
 		transform.Translate (movement ,Space.Self);
 
 
@@ -57,12 +59,13 @@ public class SateliteBehaviour : MonoBehaviour {
 	}
 
 	public void initFields(float density,float radius1,float radius2){
-
+		//meanA = SignedAngleBetween (transform.position,refVector, n);
 		r = radius1;
 		transform.localScale = new Vector3 (r, r, r);
 		R = radius2;
 		m = density*0.75f*Mathf.PI*r*r*r;
-		//m = density;
+
+		//rx=
 	}
 
 	float SignedAngleBetween(Vector3 a, Vector3 b, Vector3 n){
