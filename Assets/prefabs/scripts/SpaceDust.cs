@@ -21,8 +21,9 @@ public class SpaceDust : MonoBehaviour {
 		points = new ParticleSystem.Particle[dustMax];
 
 		for(int i =0; i<dustMax;i++){
+
 			points[i].position = Random.insideUnitSphere * dustDistance + tx.position;
-			points[i].color = new Color(1,1,1,1);
+			points[i].color = new Color(0,1,0,1);
 			points[i].size = dustSize;
 		}
 	}

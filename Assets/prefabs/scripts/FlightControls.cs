@@ -8,30 +8,56 @@ public class FlightControls : MonoBehaviour {
 	public bool inverted = true;
 	//public bool smooth = true;
 	public float acceleration = 0.1f;
+	public float turnSpeed = 0.5f;
 
-	private Vector3 lastMouse = new Vector3(512,256,0);
-	private float actSpeed = 0.0f;
-	private Vector3 lastDir = new Vector3();
+	private Vector3 deltaRotation = new Vector3(0,0,0);
+	private Vector3 actSpeed = new Vector3(0,0,0);
+
+	private Vector3 screenCenter;
+
 
 	// Use this for initialization
 	void Start () {
-		lastMouse = Input.mousePosition;
+
+		screenCenter = new Vector3 (Screen.width*0.5f,Screen.height*0.5f,0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		//Mouse look
+		screenCenter = new Vector3 (Screen.width*0.5f,Screen.height*0.5f,0);//adjust screen center 
+
+		//calculate x & y axis rotation based on cursor distance from screen center
+		if (!Input.GetKey (KeyCode.LeftAlt)) {
+			deltaRotation.x = (screenCenter.y - Input.mousePosition.y) * turnSpeed * Time.deltaTime;
+			deltaRotation.y = (Input.mousePosition.x - screenCenter.x) * turnSpeed * Time.deltaTime;
+
+
+			//if keys pressed rotate around z axis
+
+			deltaRotation.z = 0;//reset z axis delta rotation
+			if (Input.GetKey (KeyCode.Q))
+				deltaRotation.z = Screen.height * 0.5f * turnSpeed * Time.deltaTime;
 	
-		//Mouse Look
-		lastMouse = Input.mousePosition - lastMouse;
+			if (Input.GetKey (KeyCode.E))
+				deltaRotation.z = -Screen.height * 0.5f * turnSpeed * Time.deltaTime;
+		} else {
+			deltaRotation.x=0;
+			deltaRotation.y=0;
+			deltaRotation.z=0;
+		}
+				
 
-		if (!inverted)lastMouse.y = -lastMouse.y;
-		lastMouse *= sensitivity;
 
-		lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.y, transform.eulerAngles.y +lastMouse.x, 0);
-		transform.eulerAngles = lastMouse;
+		transform.Rotate (deltaRotation);//apply rotation
 
 
-		lastMouse = Input.mousePosition;
+		//speed control
+		if (Input.GetKey (KeyCode.T)) speed = 0.0f;
+		if (Input.GetKey (KeyCode.Y)) speed = 50.0f;
+		if (Input.GetKey (KeyCode.U)) speed = 500.0f;
+		if (Input.GetKey (KeyCode.I)) speed = 5000.0f;
 
 		//Movement
 
@@ -43,21 +69,38 @@ public class FlightControls : MonoBehaviour {
 		if (Input.GetKey (KeyCode.D)) dir.x += 1.0f;       //strafe right
 
 		dir.Normalize ();
+		//print ("dir: "+dir);
 
 		if (dir != Vector3.zero) {
-			if (actSpeed < 1.0f)
-				actSpeed += acceleration * Time.deltaTime;
+			if (actSpeed.magnitude < 1.0f)
+				actSpeed += dir * acceleration * Time.deltaTime;
 			else
-				actSpeed = 1.0f;
-			lastDir = dir;
+				actSpeed.Normalize();
+
 		} else {
-			if(actSpeed>0.0f)
-				actSpeed -= acceleration *Time.deltaTime;
+			if(actSpeed.magnitude >0.0f)
+				actSpeed -= dir * acceleration *Time.deltaTime;
 			else
-				actSpeed = 0.0f;
+				actSpeed = new Vector3();
 		}
 
-		transform.Translate (lastDir * actSpeed * speed * Time.deltaTime);
+		//print ("actspeed: "+actSpeed);
 
+		transform.Translate (actSpeed * speed * Time.deltaTime);
+
+	}
+
+	float SignedAngleBetween(Vector3 a, Vector3 b, Vector3 n){
+		// angle in [0,180]
+		float angle = Vector3.Angle(a,b);
+		float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+		
+		// angle in [-179,180]
+		float signed_angle = angle * sign;
+		
+		// angle in [0,360]
+		float angle360 =  ((signed_angle) + 360) % 360;
+		
+		return angle360;
 	}
 }

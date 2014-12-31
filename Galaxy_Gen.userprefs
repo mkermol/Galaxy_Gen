@@ -2,8 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\prefabs\scripts\FlightControls.cs">
     <Files>
-      <File FileName="Assets\prefabs\scripts\FlightControls.cs" Line="18" Column="35" />
-      <File FileName="Assets\prefabs\scripts\SpaceDust.cs" Line="36" Column="79" />
+      <File FileName="Assets\prefabs\scripts\Universe.cs" Line="122" Column="81" />
+      <File FileName="Assets\prefabs\scripts\ScallableUnit.cs" Line="1" Column="1" />
+      <File FileName="Assets\prefabs\scripts\Octree.cs" Line="192" Column="6" />
+      <File FileName="Assets\prefabs\scripts\PlayerBehaviour.cs" Line="33" Column="5" />
+      <File FileName="Assets\prefabs\scripts\SimulationPlaceHolder.cs" Line="8" Column="19" />
+      <File FileName="Assets\prefabs\scripts\SolarSystem.cs" Line="109" Column="3" />
+      <File FileName="Assets\prefabs\scripts\FlightControls.cs" Line="57" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

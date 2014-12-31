@@ -17,10 +17,10 @@ public class SateliteBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		inclination = 0.0;
-		RAAN = 0.0;
-		eccentricity = 0.0;
-		AP = 0.0;
+		//inclination = 0.0;
+		//RAAN = 0.0;
+		//eccentricity = 0.0;
+		//AP = 0.0;
 		M = 1000000;
 		V = (G * M*m) / (R*R);
 		meanA = 0;
@@ -35,13 +35,13 @@ public class SateliteBehaviour : MonoBehaviour {
 
 
 		V = (G * M*m) / (R*R); // calculate mean velocity magnitude at epoch
-		meanA = SignedAngleBetween (transform.position,refVector, n);//calculate mean anomally at epoch
+		meanA = SignedAngleBetween (transform.position-transform.parent.transform.position,refVector, n);//calculate mean anomally at epoch
 
 
 		//calculate and correct position to stable orbit
 		position.x =(float)( R * Math.Cos (Mathf.Deg2Rad * meanA));
 		position.z = (float)( R * Math.Sin (Mathf.Deg2Rad * meanA));
-		transform.position = position;
+		transform.position = position+transform.parent.transform.position;
 
 		//calculate mean velocity vectors
 		movement.x = (float)(V * -Math.Sin (Mathf.Deg2Rad*meanA)*Time.deltaTime*GlobalTimer.timeScale);
